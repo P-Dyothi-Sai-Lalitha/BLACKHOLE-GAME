@@ -24,4 +24,7 @@ A multiplayer strategy game where the goal is to achieve the lowest score.
 Deployed using Vercel
 
 ## 📌 Author
-Your Name
+P Dyothi Sai Lalitha
+
+## 🌐 Live Demo
+https://your-vercel-link.vercel.app](https://blackhole-game-eight.vercel.app/
