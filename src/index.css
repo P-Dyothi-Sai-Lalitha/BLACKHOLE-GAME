@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 20% 4%;
+    --foreground: 220 20% 90%;
+
+    --card: 240 15% 8%;
+    --card-foreground: 220 20% 90%;
+
+    --popover: 240 15% 8%;
+    --popover-foreground: 220 20% 90%;
+
+    --primary: 270 80% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 80% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 10% 14%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 330 80% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 15% 18%;
+    --input: 240 15% 18%;
+    --ring: 270 80% 60%;
+
+    --radius: 0.75rem;
+
+    /* Game-specific tokens */
+    --glow-primary: 270 80% 60%;
+    --glow-secondary: 200 80% 50%;
+    --glow-accent: 330 80% 55%;
+    --tile-empty: 240 15% 12%;
+    --tile-hover: 240 15% 18%;
+    --blackhole: 270 90% 15%;
+
+    /* Player colors */
+    --player-1: 200 90% 55%;
+    --player-2: 0 85% 55%;
+    --player-3: 140 70% 45%;
+    --player-4: 45 90% 55%;
+
+    --sidebar-background: 240 15% 6%;
+    --sidebar-foreground: 220 20% 90%;
+    --sidebar-primary: 270 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 10% 14%;
+    --sidebar-accent-foreground: 220 20% 90%;
+    --sidebar-border: 240 15% 18%;
+    --sidebar-ring: 270 80% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Orbitron', sans-serif;
+  }
+  .font-body {
+    font-family: 'Exo 2', sans-serif;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 15px hsl(var(--glow-primary) / 0.4),
+                0 0 40px hsl(var(--glow-primary) / 0.15);
+  }
+  .glow-secondary {
+    box-shadow: 0 0 15px hsl(var(--glow-secondary) / 0.4),
+                0 0 40px hsl(var(--glow-secondary) / 0.15);
+  }
+  .glow-accent {
+    box-shadow: 0 0 15px hsl(var(--glow-accent) / 0.4),
+                0 0 40px hsl(var(--glow-accent) / 0.15);
+  }
+
+  .glow-player-1 {
+    box-shadow: 0 0 12px hsl(var(--player-1) / 0.5),
+                0 0 30px hsl(var(--player-1) / 0.2);
+  }
+  .glow-player-2 {
+    box-shadow: 0 0 12px hsl(var(--player-2) / 0.5),
+                0 0 30px hsl(var(--player-2) / 0.2);
+  }
+  .glow-player-3 {
+    box-shadow: 0 0 12px hsl(var(--player-3) / 0.5),
+                0 0 30px hsl(var(--player-3) / 0.2);
+  }
+  .glow-player-4 {
+    box-shadow: 0 0 12px hsl(var(--player-4) / 0.5),
+                0 0 30px hsl(var(--player-4) / 0.2);
+  }
+
+  .glow-blackhole {
+    box-shadow: 0 0 20px hsl(var(--blackhole) / 0.6),
+                0 0 60px hsl(var(--blackhole) / 0.3),
+                inset 0 0 20px hsl(var(--blackhole) / 0.5);
+  }
+
+  .star-field {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, hsl(0 0% 100% / 0.4), transparent),
+      radial-gradient(1px 1px at 30% 60%, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(1.5px 1.5px at 50% 10%, hsl(0 0% 100% / 0.5), transparent),
+      radial-gradient(1px 1px at 70% 40%, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(1px 1px at 90% 80%, hsl(0 0% 100% / 0.4), transparent),
+      radial-gradient(1.5px 1.5px at 20% 90%, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(1px 1px at 60% 70%, hsl(0 0% 100% / 0.25), transparent),
+      radial-gradient(1px 1px at 80% 15%, hsl(0 0% 100% / 0.35), transparent);
+  }
+}

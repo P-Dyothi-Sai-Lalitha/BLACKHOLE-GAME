@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Hole - Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: hsl(240 20% 4%);
+      color: hsl(220 20% 90%);
+      font-family: 'Exo 2', system-ui, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    .container { max-width: 360px; }
+    .icon { font-size: 4rem; margin-bottom: 1rem; }
+    h1 { font-family: 'Orbitron', monospace; font-size: 1.25rem; letter-spacing: 0.15em; margin-bottom: 0.75rem; }
+    p { color: hsl(220 10% 50%); font-size: 0.875rem; line-height: 1.6; }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 2rem;
+      border-radius: 0.75rem;
+      border: 1px solid hsl(240 15% 18%);
+      background: transparent;
+      color: hsl(270 80% 60%);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">🕳️</div>
+    <h1>YOU ARE OFFLINE</h1>
+    <p>Black Hole requires an internet connection for multiplayer. Please check your connection and try again.</p>
+    <button onclick="location.reload()">RETRY</button>
+  </div>
+</body>
+</html>
