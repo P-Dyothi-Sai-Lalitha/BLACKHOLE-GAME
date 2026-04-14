@@ -128,10 +128,26 @@ export function GameRoom() {
   }
 
   // ─── Local Mode ───
-  if (mode === "local") {
-    if (!localState) {
-      return <GameSetup onStart={handleLocalStart} />;
-    }
+  if (!localState) {
+  return (
+    <div className="min-h-screen star-field flex flex-col">
+      <div className="flex items-center justify-between p-4">
+        <button
+          onClick={() => setMode("menu")}
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+        >
+          ← Back
+        </button>
+
+        <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
+
+        <div /> {/* empty for spacing */}
+      </div>
+
+      <GameSetup onStart={handleLocalStart} />
+    </div>
+  );
+}
 
     if (localState.phase === "finished") {
       return (
