@@ -23,6 +23,7 @@ export function GameRoom() {
 
   const online = useOnlineGame();
 
+  // ─── Local handlers ───
   const handleLocalStart = useCallback((playerCount: number, names: string[]) => {
     const state = initGameState(playerCount, names);
     const firstPlayer = state.players[state.currentPlayerIndex];
@@ -41,20 +42,25 @@ export function GameRoom() {
       if (!prev || prev.selectedToken === null) return prev;
       const newState = placeToken(prev, tileId, prev.selectedToken);
       if (newState === prev) return prev;
+
       playPlace();
-      if (newState.phase === 'finished') {
+
+      if (newState.phase === "finished") {
         playGameEnd();
         stopMusic();
       }
-      if (newState.phase === 'playing') {
+
+      if (newState.phase === "playing") {
         const nextPlayer = newState.players[newState.currentPlayerIndex];
         const nextToken = getNextRequiredToken(nextPlayer);
         return { ...newState, selectedToken: nextToken };
       }
+
       return newState;
     });
   }, []);
 
+  // ─── Online handlers ───
   const [onlineSelectedToken, setOnlineSelectedToken] = useState<number | null>(null);
 
   const handleOnlineTileClick = useCallback((tileId: number) => {
@@ -65,20 +71,37 @@ export function GameRoom() {
     online.makeMove(tileId, required);
   }, [online]);
 
+  // ─── Menu ───
   if (mode === "menu") {
     return (
       <div className="min-h-screen star-field flex flex-col items-center justify-center p-4">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center"
+        >
           <h1 className="font-display text-3xl text-foreground tracking-widest mb-2">BLACK HOLE</h1>
           <p className="text-muted-foreground font-body text-sm mb-8">Strategy game · Lowest score wins</p>
+
           <div className="space-y-3">
-            <button onClick={() => { playClick(); setMode("local"); }} className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary">
+            <button
+              onClick={() => { playClick(); setMode("local"); }}
+              className="w-full py-4 rounded-xl bg-primary text-primary-foreground flex items-center justify-center gap-2"
+            >
               <Monitor className="w-4 h-4" /> LOCAL MULTIPLAYER
             </button>
-            <button onClick={() => { playClick(); setMode("online"); }} className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary">
+
+            <button
+              onClick={() => { playClick(); setMode("online"); }}
+              className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground flex items-center justify-center gap-2"
+            >
               <Wifi className="w-4 h-4" /> ONLINE MULTIPLAYER
             </button>
-            <button onClick={() => setShowHowToPlay(true)} className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all">
+
+            <button
+              onClick={() => setShowHowToPlay(true)}
+              className="w-full py-3 rounded-xl border border-border flex items-center justify-center gap-2"
+            >
               <HelpCircle className="w-4 h-4" /> HOW TO PLAY
             </button>
           </div>
@@ -86,12 +109,6 @@ export function GameRoom() {
 
         <div className="mt-6 flex flex-col items-center gap-3">
           <InstallPrompt />
-          <p className="text-xs text-muted-foreground font-body">
-            Inspired by{" "}
-            <a href="https://www.youtube.com/@TheTabletopFamily" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              The Tabletop Family from YouTube
-            </a>
-          </p>
         </div>
 
         <HowToPlayModal open={showHowToPlay} onOpenChange={setShowHowToPlay} />
@@ -99,21 +116,29 @@ export function GameRoom() {
     );
   }
 
-  // ✅ FIXED LOCAL MODE BLOCK
+  // ─── Local Mode ───
   if (mode === "local") {
 
     if (!localState) {
       return (
-        <div className="min-h-screen star-field flex flex-col">
-          <div className="flex items-center justify-between p-4">
-            <button onClick={() => setMode("menu")} className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-              ← Back
-            </button>
-            <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
-            <div />
-          </div>
+        <div className="min-h-screen star-field flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full">
 
-          <GameSetup onStart={handleLocalStart} />
+            <div className="flex items-center justify-between mb-4">
+              <button
+                onClick={() => setMode("menu")}
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                ← Back
+              </button>
+
+              <h1 className="font-display text-sm tracking-widest">BLACK HOLE</h1>
+
+              <div className="w-10" />
+            </div>
+
+            <GameSetup onStart={handleLocalStart} />
+          </div>
         </div>
       );
     }
@@ -129,34 +154,38 @@ export function GameRoom() {
 
     return (
       <div className="min-h-screen star-field flex flex-col">
+
         <div className="flex items-center justify-between p-4">
-          <button onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }} className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <button
+            onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }}
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             ← Back
           </button>
 
-          <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
+          <h1 className="font-display text-sm tracking-widest">BLACK HOLE</h1>
 
           <div className="flex items-center gap-2">
             <AudioToggle />
-            <button onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }}>
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        <motion.div key={localState.currentPlayerIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center px-4 pb-3">
-          <p className="font-body text-sm text-muted-foreground">
+        <motion.div className="text-center px-4 pb-3">
+          <p className="text-sm text-muted-foreground">
             {localState.selectedToken
-              ? `Place token ${localState.selectedToken} — tap a tile`
-              : "Select a token below, then tap a tile"}
+              ? `Place token ${localState.selectedToken}`
+              : "Select a token"}
           </p>
         </motion.div>
 
-        <div className="flex-1 flex items-center justify-center px-4 py-2">
+        <div className="flex-1 flex items-center justify-center px-4">
           <Board state={localState} onTileClick={handleLocalTileClick} />
         </div>
 
-        <div className="p-4 space-y-2 max-h-[40vh] overflow-y-auto">
+        <div className="p-4 space-y-2">
           {localState.players.map(p => (
             <TokenSelector
               key={p.id}
@@ -171,6 +200,7 @@ export function GameRoom() {
     );
   }
 
+  // ─── Online Mode ───
   if (online.phase === "menu") {
     return (
       <OnlineLobby
@@ -179,88 +209,6 @@ export function GameRoom() {
         onBack={() => { online.reset(); setMode("menu"); }}
         error={online.error}
       />
-    );
-  }
-
-  if (online.phase === "waiting" && online.room) {
-    return (
-      <WaitingRoom
-        room={online.room}
-        isHost={online.myPlayerIndex === 0}
-        onStart={online.startGame}
-      />
-    );
-  }
-
-  if ((online.phase === "playing" || online.phase === "finished") && online.gameState) {
-    const gs = online.gameState;
-
-    if (gs.phase === "playing" && !isMusicPlaying()) {
-      playGameStart();
-      startMusic();
-    }
-    if (gs.phase === "finished" && isMusicPlaying()) {
-      playGameEnd();
-      stopMusic();
-    }
-
-    const autoSelectedToken = online.isMyTurn
-      ? getNextRequiredToken(gs.players[gs.currentPlayerIndex])
-      : null;
-
-    const displayState: GameState = {
-      ...gs,
-      selectedToken: autoSelectedToken,
-    };
-
-    if (gs.phase === "finished") {
-      return (
-        <div className="min-h-screen star-field flex flex-col items-center justify-center p-4 gap-6">
-          <Board state={displayState} onTileClick={() => {}} />
-          <ScoreBoard state={displayState} onRestart={() => { online.reset(); setMode("menu"); }} />
-        </div>
-      );
-    }
-
-    return (
-      <div className="min-h-screen star-field flex flex-col">
-        <div className="flex items-center justify-between p-4">
-          <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
-          <div className="flex items-center gap-2">
-            {online.room && (
-              <span className="font-display text-xs text-muted-foreground tracking-wider">{online.room.roomCode}</span>
-            )}
-            <AudioToggle />
-            <button onClick={() => { stopMusic(); online.reset(); setMode("menu"); }} className="text-muted-foreground hover:text-foreground transition-colors">
-              <RotateCcw className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        <motion.div key={gs.currentPlayerIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center px-4 pb-3">
-          <p className="font-body text-sm text-muted-foreground">
-            {online.isMyTurn
-              ? `Place token ${autoSelectedToken} — tap a tile`
-              : `Waiting for ${gs.players[gs.currentPlayerIndex]?.name}...`}
-          </p>
-        </motion.div>
-
-        <div className="flex-1 flex items-center justify-center px-4 py-2">
-          <Board state={displayState} onTileClick={handleOnlineTileClick} />
-        </div>
-
-        <div className="p-4 space-y-2 max-h-[40vh] overflow-y-auto">
-          {gs.players.map(p => (
-            <TokenSelector
-              key={p.id}
-              player={p}
-              selectedToken={online.isMyTurn && gs.currentPlayerIndex === p.id ? onlineSelectedToken : null}
-              onSelect={v => online.isMyTurn && gs.currentPlayerIndex === p.id && setOnlineSelectedToken(v)}
-              isActive={online.isMyTurn && gs.currentPlayerIndex === p.id}
-            />
-          ))}
-        </div>
-      </div>
     );
   }
 
