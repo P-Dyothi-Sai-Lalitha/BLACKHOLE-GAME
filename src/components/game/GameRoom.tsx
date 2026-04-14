@@ -110,13 +110,7 @@ export function GameRoom() {
         <div className="mt-6 flex flex-col items-center gap-3">
           <InstallPrompt />
           <p className="text-xs text-muted-foreground font-body">
-            Inspired by 
-            <p
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              The Tabletop Family from YouTube
-            </p>
+            Inspired by The Tabletop Family from YouTube
           </p>
         </div>
 
