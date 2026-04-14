@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, Play } from "lucide-react";
+import { Users, Play, ChevronLeft } from "lucide-react";
 
 interface GameSetupProps {
   onStart: (playerCount: number, names: string[]) => void;
+  onBack: () => void;
 }
 
-export function GameSetup({ onStart }: GameSetupProps) {
+export function GameSetup({ onStart, onBack }: GameSetupProps) {
   const [playerCount, setPlayerCount] = useState(2);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
 
@@ -20,9 +21,17 @@ export function GameSetup({ onStart }: GameSetupProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-card border border-border rounded-2xl p-8 max-w-md w-full"
+        className="bg-card border border-border rounded-2xl p-8 max-w-md w-full relative"
       >
-        <h1 className="font-display text-3xl text-center mb-2 text-foreground tracking-widest">
+        {/* Back Button matching Online Mode style */}
+        <button
+          onClick={onBack}
+          className="absolute top-6 left-6 flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm font-display tracking-wider"
+        >
+          <ChevronLeft className="w-4 h-4" /> BACK
+        </button>
+
+        <h1 className="font-display text-3xl text-center mb-2 text-foreground tracking-widest mt-4">
           BLACK HOLE
         </h1>
         <p className="text-center text-muted-foreground font-body text-sm mb-8">
