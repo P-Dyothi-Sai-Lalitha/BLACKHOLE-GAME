@@ -111,14 +111,12 @@ export function GameRoom() {
           <InstallPrompt />
           <p className="text-xs text-muted-foreground font-body">
             Inspired by{" "}
-            <a
-              href="https://www.youtube.com/@TheTabletopFamily"
-              target="_blank"
+            <p
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
               The Tabletop Family from YouTube
-            </a>
+            </p>
           </p>
         </div>
 
