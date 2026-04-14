@@ -140,7 +140,10 @@ export function GameRoom() {
           <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
           <div className="flex items-center gap-2">
             <AudioToggle />
-            <button onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button 
+              onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }} 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
