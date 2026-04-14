@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, Play, ChevronLeft } from "lucide-react";
+import { Users, Play, ArrowLeft } from "lucide-react";
 
 interface GameSetupProps {
   onStart: (playerCount: number, names: string[]) => void;
@@ -23,12 +23,12 @@ export function GameSetup({ onStart, onBack }: GameSetupProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="bg-card border border-border rounded-2xl p-8 max-w-md w-full relative"
       >
-        {/* Back Button matching Online Mode style */}
+        {/* Back Button with ArrowLeft and Sentence Case */}
         <button
           onClick={onBack}
           className="absolute top-6 left-6 flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm font-display tracking-wider"
         >
-          <ArrowLeft className="w-3 h-3" /> Back
+          <ArrowLeft className="w-4 h-4" /> Back
         </button>
 
         <h1 className="font-display text-3xl text-center mb-2 text-foreground tracking-widest mt-4">
