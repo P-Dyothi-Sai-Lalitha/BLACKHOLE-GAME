@@ -10,7 +10,7 @@ import { InstallPrompt } from "./InstallPrompt";
 import { HowToPlayModal } from "./HowToPlayModal";
 import { initGameState, placeToken, getNextRequiredToken, type GameState } from "@/lib/gameLogic";
 import { useOnlineGame } from "@/hooks/useOnlineGame";
-import { RotateCcw, Wifi, Monitor, HelpCircle } from "lucide-react";
+import { RotateCcw, Wifi, Monitor, HelpCircle, ArrowLeft } from "lucide-react";
 import { AudioToggle } from "./AudioToggle";
 import { playClick, playPlace, playGameStart, playGameEnd, startMusic, stopMusic, isMusicPlaying } from "@/lib/audioManager";
 
@@ -57,6 +57,14 @@ export function GameRoom() {
       }
       return newState;
     });
+  }, []);
+
+  // ─── Go back to menu from local mode ───
+  const handleLocalBack = useCallback(() => {
+    playClick();
+    stopMusic();
+    setLocalState(null);
+    setMode("menu");
   }, []);
 
   // ─── Online handlers ───
@@ -111,7 +119,7 @@ export function GameRoom() {
           <InstallPrompt />
           <p className="text-xs text-muted-foreground font-body">
             Inspired by{" "}
-            <a
+            
               href="https://www.youtube.com/@TheTabletopFamily"
               target="_blank"
               rel="noopener noreferrer"
@@ -129,8 +137,21 @@ export function GameRoom() {
 
   // ─── Local Mode ───
   if (mode === "local") {
+    // GameSetup screen — show Back button to return to menu
     if (!localState) {
-      return <GameSetup onStart={handleLocalStart} />;
+      return (
+        <div className="min-h-screen star-field flex flex-col">
+          <div className="flex items-center p-4">
+            <button
+              onClick={handleLocalBack}
+              className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 font-display text-xs tracking-wider"
+            >
+              <ArrowLeft className="w-4 h-4" /> BACK
+            </button>
+          </div>
+          <GameSetup onStart={handleLocalStart} />
+        </div>
+      );
     }
 
     if (localState.phase === "finished") {
@@ -148,7 +169,18 @@ export function GameRoom() {
           <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
           <div className="flex items-center gap-2">
             <AudioToggle />
-            <button onClick={() => { stopMusic(); setLocalState(null); setMode("menu"); }} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button
+              onClick={handleLocalBack}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Back to menu"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleLocalBack}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Restart"
+            >
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
