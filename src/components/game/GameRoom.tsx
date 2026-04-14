@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Board } from "./Board";
 import { TokenSelector } from "./TokenSelector";
@@ -30,6 +30,7 @@ export function GameRoom() {
     const firstPlayer = state.players[state.currentPlayerIndex];
     const nextToken = getNextRequiredToken(firstPlayer);
     setLocalState({ ...state, selectedToken: nextToken });
+    
     // Audio: game start sound + background music
     playGameStart();
     startMusic();
@@ -44,7 +45,7 @@ export function GameRoom() {
       if (!prev || prev.selectedToken === null) return prev;
       const newState = placeToken(prev, tileId, prev.selectedToken);
       if (newState === prev) return prev; // invalid move
-      // Audio: tile placement
+      
       playPlace();
       if (newState.phase === 'finished') {
         playGameEnd();
@@ -83,21 +84,33 @@ export function GameRoom() {
           <p className="text-muted-foreground font-body text-sm mb-8">Strategy game · Lowest score wins</p>
           <div className="space-y-3">
             <button
-              onClick={() => { playClick(); setMode("local"); }}
+              onClick={() => { 
+                playClick(); 
+                startMusic(); // Starts music on user interaction
+                setMode("local"); 
+              }}
               className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary"
             >
               <Monitor className="w-4 h-4" /> LOCAL MULTIPLAYER
             </button>
             <button
-              onClick={() => { playClick(); setMode("online"); }}
+              onClick={() => { 
+                playClick(); 
+                startMusic(); // Starts music on user interaction
+                setMode("online"); 
+              }}
               className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary"
             >
               <Wifi className="w-4 h-4" /> ONLINE MULTIPLAYER
             </button>
             <button
-              onClick={() => setShowHowToPlay(true)}
+              onClick={() => {
+                playClick();
+                startMusic();
+                setShowHowToPlay(true);
+              }}
               className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all"
             >
@@ -106,7 +119,6 @@ export function GameRoom() {
           </div>
         </motion.div>
 
-        {/* Install & Credits */}
         <div className="mt-6 flex flex-col items-center gap-3">
           <InstallPrompt />
           <p className="text-xs text-muted-foreground font-body">
@@ -122,7 +134,6 @@ export function GameRoom() {
   // ─── Local Mode ───
   if (mode === "local") {
     if (!localState) {
-      // Pass the onBack prop here to return to menu
       return <GameSetup onStart={handleLocalStart} onBack={() => setMode("menu")} />;
     }
 
