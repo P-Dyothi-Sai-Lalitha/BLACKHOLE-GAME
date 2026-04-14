@@ -21,7 +21,6 @@ export function GameRoom() {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [localState, setLocalState] = useState<GameState | null>(null);
 
-  // Online game hook
   const online = useOnlineGame();
 
   // ─── Local handlers ───
@@ -30,7 +29,6 @@ export function GameRoom() {
     const firstPlayer = state.players[state.currentPlayerIndex];
     const nextToken = getNextRequiredToken(firstPlayer);
     setLocalState({ ...state, selectedToken: nextToken });
-    // Audio: game start sound + background music
     playGameStart();
     startMusic();
   }, []);
@@ -43,14 +41,13 @@ export function GameRoom() {
     setLocalState(prev => {
       if (!prev || prev.selectedToken === null) return prev;
       const newState = placeToken(prev, tileId, prev.selectedToken);
-      if (newState === prev) return prev; // invalid move
-      // Audio: tile placement
+      if (newState === prev) return prev;
       playPlace();
-      if (newState.phase === 'finished') {
+      if (newState.phase === "finished") {
         playGameEnd();
         stopMusic();
       }
-      if (newState.phase === 'playing') {
+      if (newState.phase === "playing") {
         const nextPlayer = newState.players[newState.currentPlayerIndex];
         const nextToken = getNextRequiredToken(nextPlayer);
         return { ...newState, selectedToken: nextToken };
@@ -59,7 +56,6 @@ export function GameRoom() {
     });
   }, []);
 
-  // ─── Go back to menu from local mode ───
   const handleLocalBack = useCallback(() => {
     playClick();
     stopMusic();
@@ -78,7 +74,7 @@ export function GameRoom() {
     online.makeMove(tileId, required);
   }, [online]);
 
-  // ─── Mode Menu ───
+  // ─── Menu ───
   if (mode === "menu") {
     return (
       <div className="min-h-screen star-field flex flex-col items-center justify-center p-4">
@@ -92,33 +88,29 @@ export function GameRoom() {
           <div className="space-y-3">
             <button
               onClick={() => { playClick(); setMode("local"); }}
-              className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider
-                flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary"
+              className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary"
             >
               <Monitor className="w-4 h-4" /> LOCAL MULTIPLAYER
             </button>
             <button
               onClick={() => { playClick(); setMode("online"); }}
-              className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider
-                flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary"
+              className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary"
             >
               <Wifi className="w-4 h-4" /> ONLINE MULTIPLAYER
             </button>
             <button
               onClick={() => setShowHowToPlay(true)}
-              className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider
-                flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all"
+              className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all"
             >
               <HelpCircle className="w-4 h-4" /> HOW TO PLAY
             </button>
           </div>
         </motion.div>
 
-        {/* Install & Credits */}
         <div className="mt-6 flex flex-col items-center gap-3">
           <InstallPrompt />
           <p className="text-xs text-muted-foreground font-body">
-            Inspired by{" "}
+            {"Inspired by "}
             
               href="https://www.youtube.com/@TheTabletopFamily"
               target="_blank"
@@ -137,7 +129,6 @@ export function GameRoom() {
 
   // ─── Local Mode ───
   if (mode === "local") {
-    // GameSetup screen — show Back button to return to menu
     if (!localState) {
       return (
         <div className="min-h-screen star-field flex flex-col">
@@ -177,7 +168,7 @@ export function GameRoom() {
               <ArrowLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={handleLocalBack}
+              onClick={() => setLocalState(null)}
               className="text-muted-foreground hover:text-foreground transition-colors"
               title="Restart"
             >
@@ -235,7 +226,6 @@ export function GameRoom() {
   if ((online.phase === "playing" || online.phase === "finished") && online.gameState) {
     const gs = online.gameState;
 
-    // Start music on first render of online playing phase
     if (gs.phase === "playing" && !isMusicPlaying()) {
       playGameStart();
       startMusic();
@@ -245,12 +235,10 @@ export function GameRoom() {
       stopMusic();
     }
 
-    // Auto-select the required token for online play
     const autoSelectedToken = online.isMyTurn
       ? getNextRequiredToken(gs.players[gs.currentPlayerIndex])
       : null;
 
-    // Inject selected token for display
     const displayState: GameState = {
       ...gs,
       selectedToken: autoSelectedToken,
@@ -274,7 +262,10 @@ export function GameRoom() {
               <span className="font-display text-xs text-muted-foreground tracking-wider">{online.room.roomCode}</span>
             )}
             <AudioToggle />
-            <button onClick={() => { stopMusic(); online.reset(); setMode("menu"); }} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button
+              onClick={() => { stopMusic(); online.reset(); setMode("menu"); }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
@@ -283,8 +274,7 @@ export function GameRoom() {
           <p className="font-body text-sm text-muted-foreground">
             {online.isMyTurn
               ? `Place token ${autoSelectedToken} — tap a tile`
-              : `Waiting for ${gs.players[gs.currentPlayerIndex]?.name}...`
-            }
+              : `Waiting for ${gs.players[gs.currentPlayerIndex]?.name}...`}
           </p>
         </motion.div>
         <div className="flex-1 flex items-center justify-center px-4 py-2">
