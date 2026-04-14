@@ -122,7 +122,8 @@ export function GameRoom() {
   // ─── Local Mode ───
   if (mode === "local") {
     if (!localState) {
-      return <GameSetup onStart={handleLocalStart} />;
+      // Pass the onBack prop here to return to menu
+      return <GameSetup onStart={handleLocalStart} onBack={() => setMode("menu")} />;
     }
 
     if (localState.phase === "finished") {
@@ -198,7 +199,6 @@ export function GameRoom() {
   if ((online.phase === "playing" || online.phase === "finished") && online.gameState) {
     const gs = online.gameState;
 
-    // Start music on first render of online playing phase
     if (gs.phase === "playing" && !isMusicPlaying()) {
       playGameStart();
       startMusic();
@@ -208,12 +208,10 @@ export function GameRoom() {
       stopMusic();
     }
 
-    // Auto-select the required token for online play
     const autoSelectedToken = online.isMyTurn
       ? getNextRequiredToken(gs.players[gs.currentPlayerIndex])
       : null;
 
-    // Inject selected token for display
     const displayState: GameState = {
       ...gs,
       selectedToken: autoSelectedToken,
