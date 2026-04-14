@@ -132,9 +132,6 @@ export function GameRoom() {
                 ← Back
               </button>
 
-              <h1 className="font-display text-sm tracking-widest">BLACK HOLE</h1>
-
-              <div className="w-10" />
             </div>
 
             <GameSetup onStart={handleLocalStart} />
