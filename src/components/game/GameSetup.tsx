@@ -28,7 +28,7 @@ export function GameSetup({ onStart, onBack }: GameSetupProps) {
           onClick={onBack}
           className="absolute top-6 left-6 flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm font-display tracking-wider"
         >
-          <ChevronLeft className="w-4 h-4" /> Back
+          <ArrowLeft className="w-3 h-3" /> Back
         </button>
 
         <h1 className="font-display text-3xl text-center mb-2 text-foreground tracking-widest mt-4">
