@@ -4,7 +4,7 @@
  */
 
 let audioCtx: AudioContext | null = null;
-let isMuted = true; // Default: muted
+let isMuted = false; // CHANGED: Default to false so music can play
 let masterGain: GainNode | null = null;
 let musicOscillators: OscillatorNode[] = [];
 let musicGains: GainNode[] = [];
@@ -14,16 +14,20 @@ export function isMusicPlaying(): boolean {
   return musicPlaying;
 }
 
-const MASTER_VOLUME = 0.25; // 25%
-const MUSIC_VOLUME = 0.06; // Very subtle background
+const MASTER_VOLUME = 0.25; 
+const MUSIC_VOLUME = 0.06; 
 
 function getCtx(): AudioContext {
   if (!audioCtx) {
     audioCtx = new AudioContext();
     masterGain = audioCtx.createGain();
+    // Set initial volume based on muted state
     masterGain.gain.value = isMuted ? 0 : MASTER_VOLUME;
     masterGain.connect(audioCtx.destination);
   }
+  
+  // Browsers block audio until a user interaction. 
+  // This resumes the "brain" of the audio whenever a sound is requested.
   if (audioCtx.state === "suspended") {
     audioCtx.resume();
   }
@@ -31,16 +35,17 @@ function getCtx(): AudioContext {
 }
 
 function getMaster(): GainNode {
-  getCtx();
-  return masterGain!;
+  return masterGain || getCtx() && masterGain!;
 }
 
 // ─── Public API ───
 
 export function setMuted(muted: boolean) {
   isMuted = muted;
+  const ctx = getCtx();
   if (masterGain) {
-    masterGain.gain.setTargetAtTime(muted ? 0 : MASTER_VOLUME, audioCtx!.currentTime, 0.1);
+    // Smoothly fade volume in/out
+    masterGain.gain.setTargetAtTime(muted ? 0 : MASTER_VOLUME, ctx.currentTime, 0.1);
   }
 }
 
@@ -55,7 +60,6 @@ export function toggleMute(): boolean {
 
 // ─── Sound Effects ───
 
-/** Short click sound */
 export function playClick() {
   const ctx = getCtx();
   const osc = ctx.createOscillator();
@@ -71,10 +75,8 @@ export function playClick() {
   osc.stop(ctx.currentTime + 0.1);
 }
 
-/** Tile placement sound — a satisfying "thud" with reverb feel */
 export function playPlace() {
   const ctx = getCtx();
-  // Low thud
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = "sine";
@@ -87,7 +89,6 @@ export function playPlace() {
   osc.start(ctx.currentTime);
   osc.stop(ctx.currentTime + 0.25);
 
-  // High shimmer
   const osc2 = ctx.createOscillator();
   const gain2 = ctx.createGain();
   osc2.type = "triangle";
@@ -101,7 +102,6 @@ export function playPlace() {
   osc2.stop(ctx.currentTime + 0.2);
 }
 
-/** Game start — ascending arpeggio */
 export function playGameStart() {
   const ctx = getCtx();
   const notes = [330, 440, 550, 660];
@@ -121,7 +121,6 @@ export function playGameStart() {
   });
 }
 
-/** Game end — descending chord */
 export function playGameEnd() {
   const ctx = getCtx();
   const notes = [660, 550, 440, 330];
@@ -141,15 +140,14 @@ export function playGameEnd() {
   });
 }
 
-// ─── Background Music (procedural ambient drone) ───
+// ─── Background Music ───
 
 export function startMusic() {
   if (musicPlaying) return;
   const ctx = getCtx();
   musicPlaying = true;
 
-  // Create a subtle ambient drone with slow-moving harmonics
-  const fundamentals = [55, 82.5, 110]; // A1, E2, A2 — space-y chord
+  const fundamentals = [55, 82.5, 110]; 
   fundamentals.forEach((freq) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -163,16 +161,15 @@ export function startMusic() {
     musicGains.push(gain);
   });
 
-  // Add a slow LFO-modulated pad
   const padOsc = ctx.createOscillator();
   const padGain = ctx.createGain();
   const lfo = ctx.createOscillator();
   const lfoGain = ctx.createGain();
   padOsc.type = "triangle";
-  padOsc.frequency.value = 165; // E3
+  padOsc.frequency.value = 165; 
   lfo.type = "sine";
-  lfo.frequency.value = 0.15; // Very slow modulation
-  lfoGain.gain.value = 8; // Subtle frequency wobble
+  lfo.frequency.value = 0.15; 
+  lfoGain.gain.value = 8; 
   lfo.connect(lfoGain);
   lfoGain.connect(padOsc.frequency);
   padGain.gain.value = MUSIC_VOLUME * 0.5;
@@ -186,7 +183,7 @@ export function startMusic() {
 
 export function stopMusic() {
   musicOscillators.forEach((osc) => {
-    try { osc.stop(); } catch (_) { /* already stopped */ }
+    try { osc.stop(); } catch (_) { }
   });
   musicOscillators = [];
   musicGains = [];
