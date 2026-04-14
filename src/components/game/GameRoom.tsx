@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Board } from "./Board";
 import { TokenSelector } from "./TokenSelector";
@@ -31,9 +31,9 @@ export function GameRoom() {
     const nextToken = getNextRequiredToken(firstPlayer);
     setLocalState({ ...state, selectedToken: nextToken });
     
-    // Audio: game start sound + background music
+    // AUDIO TRIGGER: Starts exactly when Start Game is clicked
     playGameStart();
-    startMusic();
+    startMusic(); 
   }, []);
 
   const handleLocalSelectToken = useCallback((value: number) => {
@@ -84,33 +84,21 @@ export function GameRoom() {
           <p className="text-muted-foreground font-body text-sm mb-8">Strategy game · Lowest score wins</p>
           <div className="space-y-3">
             <button
-              onClick={() => { 
-                playClick(); 
-                startMusic(); // Starts music on user interaction
-                setMode("local"); 
-              }}
+              onClick={() => { playClick(); setMode("local"); }}
               className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary"
             >
               <Monitor className="w-4 h-4" /> LOCAL MULTIPLAYER
             </button>
             <button
-              onClick={() => { 
-                playClick(); 
-                startMusic(); // Starts music on user interaction
-                setMode("online"); 
-              }}
+              onClick={() => { playClick(); setMode("online"); }}
               className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary"
             >
               <Wifi className="w-4 h-4" /> ONLINE MULTIPLAYER
             </button>
             <button
-              onClick={() => {
-                playClick();
-                startMusic();
-                setShowHowToPlay(true);
-              }}
+              onClick={() => { playClick(); setShowHowToPlay(true); }}
               className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider
                 flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all"
             >
