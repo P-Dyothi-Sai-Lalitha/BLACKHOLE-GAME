@@ -84,25 +84,25 @@ export function GameRoom() {
           className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center"
         >
           <h1 className="font-display text-3xl text-foreground tracking-widest mb-2">BLACK HOLE</h1>
-          <p className="text-muted-foreground font-body text-sm mb-8">Strategy game · Lowest score wins</p>
+          <p className="text-muted-foreground font-body text-sm mb-8">{"Strategy game · Lowest score wins"}</p>
           <div className="space-y-3">
             <button
               onClick={() => { playClick(); setMode("local"); }}
               className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-primary"
             >
-              <Monitor className="w-4 h-4" /> LOCAL MULTIPLAYER
+              <Monitor className="w-4 h-4" />{"LOCAL MULTIPLAYER"}
             </button>
             <button
               onClick={() => { playClick(); setMode("online"); }}
               className="w-full py-4 rounded-xl bg-secondary text-secondary-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity glow-secondary"
             >
-              <Wifi className="w-4 h-4" /> ONLINE MULTIPLAYER
+              <Wifi className="w-4 h-4" />{"ONLINE MULTIPLAYER"}
             </button>
             <button
               onClick={() => setShowHowToPlay(true)}
               className="w-full py-3 rounded-xl border border-border text-muted-foreground font-display text-sm tracking-wider flex items-center justify-center gap-2 hover:text-foreground hover:border-primary/40 transition-all"
             >
-              <HelpCircle className="w-4 h-4" /> HOW TO PLAY
+              <HelpCircle className="w-4 h-4" />{"HOW TO PLAY"}
             </button>
           </div>
         </motion.div>
@@ -116,9 +116,7 @@ export function GameRoom() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
-            >
-              The Tabletop Family from YouTube
-            </a>
+            >{"The Tabletop Family from YouTube"}</a>
           </p>
         </div>
 
@@ -137,7 +135,7 @@ export function GameRoom() {
               onClick={handleLocalBack}
               className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 font-display text-xs tracking-wider"
             >
-              <ArrowLeft className="w-4 h-4" /> BACK
+              <ArrowLeft className="w-4 h-4" />{"BACK"}
             </button>
           </div>
           <GameSetup onStart={handleLocalStart} />
@@ -157,7 +155,7 @@ export function GameRoom() {
     return (
       <div className="min-h-screen star-field flex flex-col">
         <div className="flex items-center justify-between p-4">
-          <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
+          <h1 className="font-display text-sm text-foreground tracking-widest">{"BLACK HOLE"}</h1>
           <div className="flex items-center gap-2">
             <AudioToggle />
             <button
@@ -256,7 +254,7 @@ export function GameRoom() {
     return (
       <div className="min-h-screen star-field flex flex-col">
         <div className="flex items-center justify-between p-4">
-          <h1 className="font-display text-sm text-foreground tracking-widest">BLACK HOLE</h1>
+          <h1 className="font-display text-sm text-foreground tracking-widest">{"BLACK HOLE"}</h1>
           <div className="flex items-center gap-2">
             {online.room && (
               <span className="font-display text-xs text-muted-foreground tracking-wider">{online.room.roomCode}</span>
