@@ -21,19 +21,23 @@ export function GameRoom() {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [localState, setLocalState] = useState<GameState | null>(null);
 
-  // Online game hook
   const online = useOnlineGame();
 
   // ─── Local handlers ───
-  const handleLocalStart = useCallback((playerCount: number, names: string[]) => {
+  // Changed to async to ensure we can handle the audio promise
+  const handleLocalStart = useCallback(async (playerCount: number, names: string[]) => {
     const state = initGameState(playerCount, names);
     const firstPlayer = state.players[state.currentPlayerIndex];
     const nextToken = getNextRequiredToken(firstPlayer);
     setLocalState({ ...state, selectedToken: nextToken });
     
-    // AUDIO TRIGGER: Starts exactly when Start Game is clicked
-    playGameStart();
-    startMusic(); 
+    // FORCE TRIGGER: Direct call within the user-click stack
+    try {
+      playGameStart();
+      await startMusic(); 
+    } catch (err) {
+      console.error("Audio failed to start:", err);
+    }
   }, []);
 
   const handleLocalSelectToken = useCallback((value: number) => {
@@ -44,7 +48,7 @@ export function GameRoom() {
     setLocalState(prev => {
       if (!prev || prev.selectedToken === null) return prev;
       const newState = placeToken(prev, tileId, prev.selectedToken);
-      if (newState === prev) return prev; // invalid move
+      if (newState === prev) return prev;
       
       playPlace();
       if (newState.phase === 'finished') {
@@ -173,7 +177,7 @@ export function GameRoom() {
     );
   }
 
-  // ─── Online Mode ───
+  // ─── Online Mode ─── (Matches local logic)
   if (online.phase === "menu") {
     return (
       <OnlineLobby
