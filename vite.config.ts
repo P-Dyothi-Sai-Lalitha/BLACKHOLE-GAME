@@ -15,10 +15,9 @@ export default defineConfig({
 
     VitePWA({
       registerType: "autoUpdate",
-      devOptions: {
-        enabled: true,
-      },
+
       includeAssets: ["icon-192.png", "icon-512.png"],
+
       manifest: {
         name: "Black Hole Strategy Game",
         short_name: "BlackHole",
@@ -27,6 +26,7 @@ export default defineConfig({
         display: "standalone",
         background_color: "#000000",
         theme_color: "#000000",
+        orientation: "portrait",
         icons: [
           {
             src: "/icon-192.png",
@@ -41,10 +41,17 @@ export default defineConfig({
           {
             src: "/icon-512.png",
             sizes: "512x512",
-            type: "image/png",
             purpose: "maskable",
           },
         ],
+      },
+
+      // ✅ FIX: proper service worker generation
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
       },
     }),
   ],
